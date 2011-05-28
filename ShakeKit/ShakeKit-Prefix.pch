@@ -1,0 +1,13 @@
+//
+// Prefix header for all source files of the 'ShakeKit' target in the 'ShakeKit' project
+//
+
+#ifdef __OBJC__
+  #import <Foundation/Foundation.h>
+#endif
+
+#if DEBUG
+#define SGRelease(x) [x release]
+#else
+#define SGRelease(x) [x release], x = nil
+#endif
