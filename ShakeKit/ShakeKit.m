@@ -201,6 +201,11 @@
   [self.queue addOperation:request];
 }
 
+- (void)loadProfileForUser:(SKUser *)theUser completionHandler:(SKCompletionHandler)handler;
+{
+  [self loadProfileForUserWithID:theUser.userID completionHandler:handler];
+}
+
 - (void)loadProfileForCurrentlyAuthenticatedUserWithCompletionHandler:(SKCompletionHandler)handler
 {
   NSString *path = @"/user";
