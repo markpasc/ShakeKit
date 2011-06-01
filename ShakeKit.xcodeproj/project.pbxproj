@@ -145,8 +145,7 @@
 				D0750C7E1395B2FE006A85E7 /* OAuthCore.h */,
 				D0750C7F1395B2FE006A85E7 /* OAuthCore.m */,
 			);
-			name = OAuthCore;
-			path = ../../SyncKit/OAuthCore;
+			path = OAuthCore;
 			sourceTree = "<group>";
 		};
 		D0AA09511387412D00E4A8C1 = {
