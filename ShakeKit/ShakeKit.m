@@ -112,6 +112,24 @@
   [self.queue addOperation:request];
 }
 
+- (void)loadFavoritesWithCompletionHandler:(SKCompletionHandler)handler
+{
+  NSString *path = @"/favorites";
+  [self loadArrayOfClass:[SKPost class] key:@"favorites" path:path completionHandler:handler];
+}
+
+- (void)loadFavoritesBeforeKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
+{
+  NSString *path = [NSString stringWithFormat:@"/favorites/before/%@", theKey];
+  [self loadArrayOfClass:[SKPost class] key:@"favorites" path:path completionHandler:handler];
+}
+
+- (void)loadFavoritesAfterKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
+{
+  NSString *path = [NSString stringWithFormat:@"/favorites/after/%@", theKey];
+  [self loadArrayOfClass:[SKPost class] key:@"favorites" path:path completionHandler:handler];
+}
+
 - (void)loadFriendsTimelineWithCompletionHandler:(SKCompletionHandler)handler
 {
   NSString *path = @"/friends";
@@ -128,6 +146,12 @@
 {
   NSString *path = [NSString stringWithFormat:@"/friends/after/%@", theKey];
   [self loadArrayOfClass:[SKPost class] key:@"friend_shake" path:path completionHandler:handler];
+}
+
+- (void)loadMagicFilesWithCompletionHandler:(SKCompletionHandler)handler
+{
+  NSString *path = @"/magicfiles";
+  [self loadArrayOfClass:[SKPost class] key:@"magicfiles" path:path completionHandler:handler];
 }
 
 - (void)loadSharedFileWithKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
