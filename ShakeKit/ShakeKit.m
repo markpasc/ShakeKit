@@ -118,6 +118,18 @@
   [self loadArrayOfClass:[SKPost class] key:@"friend_shake" path:path completionHandler:handler];
 }
 
+- (void)loadFriendsTimelineBeforeKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
+{
+  NSString *path = [NSString stringWithFormat:@"/friends/before/%@", theKey];
+  [self loadArrayOfClass:[SKPost class] key:@"friend_shake" path:path completionHandler:handler];
+}
+
+- (void)loadFriendsTimelineAfterKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
+{
+  NSString *path = [NSString stringWithFormat:@"/friends/after/%@", theKey];
+  [self loadArrayOfClass:[SKPost class] key:@"friend_shake" path:path completionHandler:handler];
+}
+
 - (void)loadSharedFileWithKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/sharedfile/%@", theKey];
@@ -210,18 +222,6 @@
   
   [self.queue addOperation:request];
 
-}
-
-- (void)loadSharedFilesBeforeKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
-{
-  NSString *path = [NSString stringWithFormat:@"/friends/before/%@", theKey];
-  [self loadArrayOfClass:[SKPost class] key:@"friend_shake" path:path completionHandler:handler];
-}
-
-- (void)loadSharedFilesAfterKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
-{
-  NSString *path = [NSString stringWithFormat:@"/friends/after/%@", theKey];
-  [self loadArrayOfClass:[SKPost class] key:@"friend_shake" path:path completionHandler:handler];
 }
 
 #pragma mark -

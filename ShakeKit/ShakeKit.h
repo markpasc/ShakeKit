@@ -39,6 +39,16 @@ typedef void (^SKCompletionHandler)(id response, NSError *error);
 - (void)loadFriendsTimelineWithCompletionHandler:(SKCompletionHandler)handler;
 
 /**
+ Returns 10 shared files before shared file GJI
+ */
+- (void)loadFriendsTimelineBeforeKey:(NSString *)key completionHandler:(SKCompletionHandler)handler;
+
+/**
+ Returns 10 shared files after shared file GJI
+ */
+- (void)loadFriendsTimelineAfterKey:(NSString *)key completionHandler:(SKCompletionHandler)handler;
+
+/**
  Returned the shared file with the given share key (e.g., GJ1)
 */
 - (void)loadSharedFileWithKey:(NSString *)key completionHandler:(SKCompletionHandler)handler;
@@ -73,16 +83,6 @@ typedef void (^SKCompletionHandler)(id response, NSError *error);
  Optionally, include an SKShake to post to a shake other than the currently authenticated user's user shake.
 */
 - (void)uploadFileFromLocalPath:(NSURL *)localPath toShake:(SKShake *)shake withCompletionHandler:(SKCompletionHandler)handler;
-
-/**
-  Returns 10 shared files before shared file GJI
-*/
-- (void)loadSharedFilesBeforeKey:(NSString *)key completionHandler:(SKCompletionHandler)handler;
-
-/**
- Returns 10 shared files after shared file GJI
-*/
-- (void)loadSharedFilesAfterKey:(NSString *)key completionHandler:(SKCompletionHandler)handler;
 
 
 @end
