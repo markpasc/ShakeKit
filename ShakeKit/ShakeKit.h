@@ -34,19 +34,39 @@ typedef void (^SKCompletionHandler)(id response, NSError *error);
 - (void)loginWithUsername:(NSString *)username password:(NSString *)password withCompletionHandler:(SKCompletionHandler)handler;
 
 /**
+ Returns favorites
+ */
+- (void)loadFavoritesWithCompletionHandler:(SKCompletionHandler)handler;
+
+/**
+ Returns favorite files before shared file GJI
+ */
+- (void)loadFavoritesBeforeKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler;
+
+/**
+ Returns favorite files after shared file GJI
+ */
+- (void)loadFavoritesAfterKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler;
+
+/**
  Returns friend timeline
 */
 - (void)loadFriendsTimelineWithCompletionHandler:(SKCompletionHandler)handler;
 
 /**
- Returns 10 shared files before shared file GJI
+ Returns files from friend timeline before shared file GJI
  */
 - (void)loadFriendsTimelineBeforeKey:(NSString *)key completionHandler:(SKCompletionHandler)handler;
 
 /**
- Returns 10 shared files after shared file GJI
+ Returns files from friend timeline after shared file GJI
  */
 - (void)loadFriendsTimelineAfterKey:(NSString *)key completionHandler:(SKCompletionHandler)handler;
+
+/**
+ Returns magic files
+ */
+- (void)loadMagicFilesWithCompletionHandler:(SKCompletionHandler)handler;
 
 /**
  Returned the shared file with the given share key (e.g., GJ1)
