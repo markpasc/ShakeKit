@@ -21,6 +21,8 @@
 
 @interface ShakeKit ()
 - (ASIHTTPRequest *)requestWithProtocol:(NSString *)protocol host:(NSString *)host path:(NSString *)path parameters:(NSDictionary *)params method:(NSString *)method;
+- (void)loadObjectOfClass:(Class)aClass path:(NSString *)path completionHandler:(SKCompletionHandler)handler;
+- (void)loadArrayOfClass:(Class)aClass key:(NSString *)key path:(NSString *)path completionHandler:(SKCompletionHandler)handler;
 @end
 
 @implementation ShakeKit
@@ -113,92 +115,25 @@
 - (void)loadFriendsTimelineWithCompletionHandler:(SKCompletionHandler)handler
 {
   NSString *path = @"/friends";
-  
-  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
-    
-  [request setCompletionBlock:^{
-    NSDictionary *result = [[request responseString] objectFromJSONString];
-    
-    NSMutableArray *posts = [[NSMutableArray alloc] init];
-    for (NSDictionary *shakeFile in [result objectForKey:@"friend_shake"])
-    {
-      SKPost *post = [[SKPost alloc] initWithDictionary:shakeFile];
-      [posts addObject:post];
-      [post release];
-    }
-    
-    handler([posts autorelease], nil);
-  }];
-  
-  [request setFailedBlock:^{
-    NSError *error = request.error;
-    handler(nil, error);
-  }];
-  
-  [self.queue addOperation:request];
+  [self loadArrayOfClass:[SKPost class] key:@"friend_shake" path:path completionHandler:handler];
 }
 
 - (void)loadSharedFileWithKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/sharedfile/%@", theKey];
-  
-  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
-  
-  [request setCompletionBlock:^{
-    NSDictionary *responseDictionary = [[request responseString] objectFromJSONString];
-    SKPost *post = [[SKPost alloc] initWithDictionary:responseDictionary];
-    
-    handler([post autorelease], nil);
-  }];
-  
-  [request setFailedBlock:^{
-    NSError *error = request.error;
-    handler(nil, error);
-  }];
-  
-  [self.queue addOperation:request];
+  [self loadObjectOfClass:[SKPost class] path:path completionHandler:handler];
 }
 
 - (void)loadProfileForUserWithID:(NSInteger)theUserID completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/user_id/%ld", theUserID];
-  
-  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
-  
-  [request setCompletionBlock:^{
-    NSDictionary *responseDictionary = [[request responseString] objectFromJSONString];
-    SKUser *user = [[SKUser alloc] initWithDictionary:responseDictionary];
-    
-    handler([user autorelease], nil);
-  }];
-  
-  [request setFailedBlock:^{
-    NSError *error = request.error;
-    handler(nil, error);
-  }];
-  
-  [self.queue addOperation:request];
+  [self loadObjectOfClass:[SKUser class] path:path completionHandler:handler];
 }
 
 - (void)loadProfileForUserWithName:(NSString *)theScreenName completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/user_name/%@", theScreenName];
-  
-  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
-  
-  [request setCompletionBlock:^{
-    NSDictionary *responseDictionary = [[request responseString] objectFromJSONString];
-    SKUser *user = [[SKUser alloc] initWithDictionary:responseDictionary];
-    
-    handler([user autorelease], nil);
-  }];
-  
-  [request setFailedBlock:^{
-    NSError *error = request.error;
-    handler(nil, error);
-  }];
-  
-  [self.queue addOperation:request];
+  [self loadObjectOfClass:[SKUser class] path:path completionHandler:handler];
 }
 
 - (void)loadProfileForUser:(SKUser *)theUser completionHandler:(SKCompletionHandler)handler
@@ -209,50 +144,13 @@
 - (void)loadProfileForCurrentlyAuthenticatedUserWithCompletionHandler:(SKCompletionHandler)handler
 {
   NSString *path = @"/user";
-  
-  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
-  
-  [request setCompletionBlock:^{
-    NSDictionary *responseDictionary = [[request responseString] objectFromJSONString];
-    SKUser *user = [[SKUser alloc] initWithDictionary:responseDictionary];
-    
-    handler([user autorelease], nil);
-  }];
-  
-  [request setFailedBlock:^{
-    NSError *error = request.error;
-    handler(nil, error);
-  }];
-  
-  [self.queue addOperation:request];
+  [self loadObjectOfClass:[SKUser class] path:path completionHandler:handler];
 }
 
 - (void)loadShakesWithCompletionHandler:(SKCompletionHandler)handler
 {
   NSString *path = @"/shakes";
-  
-  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
-  
-  [request setCompletionBlock:^{
-    NSDictionary *responseDictionary = [[request responseString] objectFromJSONString];
-    NSMutableArray *shakes = [[NSMutableArray alloc] init];
-    for (NSDictionary *shakeInfo in [responseDictionary objectForKey:@"shakes"])
-    {
-      SKShake *shake = [[SKShake alloc] initWithDictionary:shakeInfo];
-      [shakes addObject:shake];
-      [shake release];
-    }
-    
-    handler([shakes autorelease], nil);
-  }];
-  
-  [request setFailedBlock:^{
-    NSError *error = request.error;
-    handler(nil, error);
-  }];
-  
-  [self.queue addOperation:request];
-
+  [self loadArrayOfClass:[SKShake class] key:@"shakes" path:path completionHandler:handler];
 }
 
 - (void)uploadFileFromLocalPath:(NSURL *)theLocalPath toShake:(SKShake *)theShake withCompletionHandler:(SKCompletionHandler)handler
@@ -317,55 +215,13 @@
 - (void)loadSharedFilesBeforeKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/friends/before/%@", theKey];
-  
-  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
-  
-  [request setCompletionBlock:^{
-    NSDictionary *responseDictionary = [[request responseString] objectFromJSONString];
-    NSMutableArray *posts = [[NSMutableArray alloc] init];
-    for (NSDictionary *shakeFile in [responseDictionary objectForKey:@"friend_shake"])
-    {
-      SKPost *post = [[SKPost alloc] initWithDictionary:shakeFile];
-      [posts addObject:post];
-      [post release];
-    }
-    
-    handler([posts autorelease], nil);
-  }];
-  
-  [request setFailedBlock:^{
-    NSError *error = request.error;
-    handler(nil, error);
-  }];
-  
-  [self.queue addOperation:request];
+  [self loadArrayOfClass:[SKPost class] key:@"friend_shake" path:path completionHandler:handler];
 }
 
 - (void)loadSharedFilesAfterKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/friends/after/%@", theKey];
-  
-  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
-  
-  [request setCompletionBlock:^{
-    NSDictionary *responseDictionary = [[request responseString] objectFromJSONString];
-    NSMutableArray *posts = [[NSMutableArray alloc] init];
-    for (NSDictionary *shakeFile in [responseDictionary objectForKey:@"friend_shake"])
-    {
-      SKPost *post = [[SKPost alloc] initWithDictionary:shakeFile];
-      [posts addObject:post];
-      [post release];
-    }
-    
-    handler([posts autorelease], nil);
-  }];
-  
-  [request setFailedBlock:^{
-    NSError *error = request.error;
-    handler(nil, error);
-  }];
-  
-  [self.queue addOperation:request];
+  [self loadArrayOfClass:[SKPost class] key:@"friend_shake" path:path completionHandler:handler];
 }
 
 #pragma mark -
@@ -409,6 +265,50 @@
   [request addRequestHeader:@"Authorization" value:header];  
   
   return request;
+}
+
+- (void)loadObjectOfClass:(Class)aClass path:(NSString *)path completionHandler:(SKCompletionHandler)handler
+{
+  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
+  
+  [request setCompletionBlock:^{
+    NSDictionary *responseDictionary = [[request responseString] objectFromJSONString];
+    id obj = [[aClass alloc] initWithDictionary:responseDictionary];
+    
+    handler([obj autorelease], nil);
+  }];
+  
+  [request setFailedBlock:^{
+    NSError *error = request.error;
+    handler(nil, error);
+  }];
+  
+  [self.queue addOperation:request];
+}
+
+- (void)loadArrayOfClass:(Class)aClass key:(NSString *)key path:(NSString *)path completionHandler:(SKCompletionHandler)handler
+{
+  __block ASIHTTPRequest *request = [self requestWithProtocol:kSKProtocolHTTPS host:kSKMlkShkAPIHost path:path parameters:nil method:kSKMethodGET];
+  
+  [request setCompletionBlock:^{
+    NSDictionary *responseDictionary = [[request responseString] objectFromJSONString];
+    NSMutableArray *objs = [[NSMutableArray alloc] init];
+    for (NSDictionary *objInfo in [responseDictionary objectForKey:key])
+    {
+      id obj = [[aClass alloc] initWithDictionary:objInfo];
+      [objs addObject:obj];
+      [obj release];
+    }
+    
+    handler([objs autorelease], nil);
+  }];
+  
+  [request setFailedBlock:^{
+    NSError *error = request.error;
+    handler(nil, error);
+  }];
+  
+  [self.queue addOperation:request];
 }
 
 @end
