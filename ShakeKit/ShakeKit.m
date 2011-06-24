@@ -159,7 +159,7 @@
   [self.queue addOperation:request];
 }
 
-- (void)loadProfileForUserWithID:(NSInteger)theUserID completionHandler:(SKCompletionHandler)handler;
+- (void)loadProfileForUserWithID:(NSInteger)theUserID completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/user_id/%ld", theUserID];
   
@@ -180,7 +180,7 @@
   [self.queue addOperation:request];
 }
 
-- (void)loadProfileForUserWithName:(NSString *)theScreenName completionHandler:(SKCompletionHandler)handler;
+- (void)loadProfileForUserWithName:(NSString *)theScreenName completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/user_name/%@", theScreenName];
   
@@ -201,7 +201,7 @@
   [self.queue addOperation:request];
 }
 
-- (void)loadProfileForUser:(SKUser *)theUser completionHandler:(SKCompletionHandler)handler;
+- (void)loadProfileForUser:(SKUser *)theUser completionHandler:(SKCompletionHandler)handler
 {
   [self loadProfileForUserWithID:theUser.userID completionHandler:handler];
 }
@@ -314,7 +314,7 @@
 
 }
 
-- (void)loadSharedFilesBeforeKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler;
+- (void)loadSharedFilesBeforeKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/friends/before/%@", theKey];
   
@@ -341,7 +341,7 @@
   [self.queue addOperation:request];
 }
 
-- (void)loadSharedFilesAfterKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler;
+- (void)loadSharedFilesAfterKey:(NSString *)theKey completionHandler:(SKCompletionHandler)handler
 {
   NSString *path = [NSString stringWithFormat:@"/friends/after/%@", theKey];
   
